@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>API and Dynamic JS</title>
+  <style>
+    body {
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif, sans-serif;
+  }
+  
+  header {
+    background-color: #ccc;
+    padding: 10px;
+    overflow: hidden;
+  }
+  
+  .main-container {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    overflow-y: auto;
+  }
+  
+  .left {
+    flex: 2;
+    padding-right: 350px;
+    padding-left: 60px;
+  }
+  
+  .left h1 {
+    font-size: 70px;
+    font-weight: 200;
+    margin-bottom: 20px;
+  }
+  
+  
+  .left ul {
+    list-style: none;
+    padding-left: 0;
+    font-size: 24px;
+  }
+  
+  .left li {
+    margin-bottom: 10px;
+  }
+  
+  .right {
+    width: 250px; 
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #eee;
+    padding: 10px 40px 40px 40px;
+  }
+  
+  .right h2 {
+    font-size: 25px;
+    margin-bottom: 10px;
+    font-weight: 200;
+  }
+  
+  .right > #marketplace > div {
+    background-color: lightgrey;
+    padding: 20px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-family: 'Times New Roman', Times, serif, sans-serif;
+    line-height: 1.4;
+  }
+  </style>
+</head>
+<body>
+  <header>
+      <button id="mybutton" style="float: left; border: none; background-color: #ccc; cursor: pointer; padding: 8px 16px;">Facebook</button>
+      <button id="mybtn" style="float: right; border: none; background-color: #ccc; cursor: pointer; padding: 8px 16px;">Friends</button>
+  </header>
+
+  <main class="main-container">
+    <section class="left" id="features-section">
+    </section>
+
+    <section class="right">
+      <h2>Marketplace</h2>
+      <div id="marketplace"></div>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById("mybutton").onclick = function () {
+        location.href = "index.html";
+    };
+    document.getElementById("mybtn").onclick = function () {
+        location.href = "friends.html";
+    };
+
+    const features = [
+        { icon: "📱", text: "Social Networking Platform - Connects people worldwide through posts, photos, and videos." },
+        { icon: "💬", text: "Messaging & Chat - Includes Messenger for real-time conversations and group chats." },
+        { icon: "📰", text: "News Feed - Personalized stream of updates from friends, pages, and groups." },
+        { icon: "📸", text: "Media Sharing - Upload and share photos, stories, and live videos easily." },
+        { icon: "👥", text: "Groups & Communities - Join or create interest-based groups for discussions and events." },
+        { icon: "📅", text: "Events - Create and manage events with RSVPs, reminders, and details." },
+        { icon: "📈", text: "Marketplace & Ads - Buy/sell items locally and run targeted advertisements." },
+        { icon: "🔒", text: "Privacy Controls - Customize who can see your posts and manage account security." }
+    ];
+    
+    const featureSection = document.getElementById('features-section');
+    const h1 = document.createElement('h1');
+    h1.innerText = "WELCOME TO FACEBOOK";
+    featureSection.appendChild(h1);
+    
+    const ul = document.createElement('ul');
+    features.forEach(feature => {
+        const li = document.createElement('li');
+        li.innerText = `${feature.icon} ${feature.text}`;
+        ul.appendChild(li);
+    });
+    featureSection.appendChild(ul);  
+    
+    fetch('https://mdn.github.io/learning-area/javascript/apis/fetching-data/can-store/products.json')
+    .then(response => response.json())
+    .then(products => {
+        const container = document.getElementById('marketplace');
+        products.forEach(product => {
+        const item = document.createElement('div');
+        item.innerHTML = `
+            <strong style="text-transform: uppercase;">${product.name}</strong><br>
+            $${product.price.toFixed(2)}<br>
+            ${product.type.toLowerCase()}
+        `;
+        container.appendChild(item);
+        });
+    })
+    .catch(err => console.error('Error loading marketplace:', err));
+  </script>
+</body>
+</html>
